@@ -3,16 +3,18 @@ import multipart from 'fastify-multipart'
 import formbody from 'fastify-formbody'
 
 import { config } from './config.js'
-import { helloworld, posttest } from './api/test.js'
+import { helloworld, forum_test } from './api/test.js'
 
+// --- init fastify ---
 const fastify = fastifyFac({ logger: true })
 fastify.register(multipart)
 fastify.register(formbody)
 
+// --- register api functions ---
 fastify.register(helloworld)
-fastify.register(posttest)
+fastify.register(forum_test)
 
-// Run the server!
+// --- run the server ---
 const start = async () => {
     try {
         await fastify.listen(config.port, config.host)
