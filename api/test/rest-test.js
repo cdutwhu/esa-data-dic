@@ -1,5 +1,5 @@
 
-import { getFileContent } from './tool.js'
+import { getFileContent } from '../tool.js'
 import * as ejs from 'ejs'
 import * as fs from 'fs'
 
@@ -25,7 +25,7 @@ export const helloworld = async (fastify, options) => {
         res.send(req.body)
     })
 
-    fastify.get('/', async (req, res) => {
+    fastify.get('/index', async (req, res) => {
         const data = await getFileContent('./www/index.html')
         res
             .code(200)

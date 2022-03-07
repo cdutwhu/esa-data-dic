@@ -1,6 +1,6 @@
 import * as mongodb from 'mongodb'
 import * as assert from 'assert'
-import { getFileContent } from './tool.js'
+import { getFileContent } from '../tool.js'
 
 const MongoClient = mongodb.MongoClient
 
@@ -56,9 +56,7 @@ MongoClient.connect(url, async (err, client) => {
     //     await col.insertOne(obj)
     // }
 
-    //////////////////////////////////////////////////////////
-
-    await insert_file(db, 'person-familyname', '../data/preproc/out/person-familyname.json')
+    //////////////////////////////////////////////////////////   
 
     await insert_file(db, 'school', '../data/preproc/out/school.json')
 
