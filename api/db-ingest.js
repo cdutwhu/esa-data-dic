@@ -1,6 +1,7 @@
 import * as mongodb from 'mongodb'
 import * as assert from 'assert'
-import { getFileContent } from './tool.js'
+import { getFileContent, getDir } from './tool.js'
+import * as path from 'path'
 
 const MongoClient = mongodb.MongoClient
 
@@ -12,7 +13,7 @@ const insert_file = async (db, colName, filepath) => {
     try {
         await db.createCollection(colName)
     } catch (err) {
-        if (err.codeName != 'NamespaceExists') {            
+        if (err.codeName != 'NamespaceExists') {
             return
         }
         console.log(`${err.codeName}, use existing collection - ${colName}`)
@@ -21,6 +22,7 @@ const insert_file = async (db, colName, filepath) => {
 
     const data = await getFileContent(filepath)
     const obj = JSON.parse(data)
+
     // await col.insertOne(obj)
     await col.updateOne({ Entity: obj.Entity }, { $set: obj }, { upsert: true })
 }
@@ -32,8 +34,16 @@ MongoClient.connect(url, async (err, client) => {
     const db = client.db(dbName) // create if not existing
 
     const colName = 'entity'
-    await insert_file(db, colName, '../data/preproc/out/person-familyname.json')
-    await insert_file(db, colName, '../data/preproc/out/school.json')
+
+    const data_path = '../data/preproc/out'
+    const names = await getDir(data_path)
+    console.log(names)
+
+    for (let filename of names) {
+        const filepath = path.join(data_path, filename)
+        console.log("storing: " + filepath)
+        await insert_file(db, colName, filepath)
+    }
 
     client.close()
 })

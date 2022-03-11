@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	gio "github.com/digisan/gotk/io"
+	"github.com/digisan/gotk/strs"
 	jt "github.com/digisan/json-tool"
 	lk "github.com/digisan/logkit"
 )
@@ -24,7 +25,9 @@ import (
 // 4) Be sure to encode any quotation marks that might be included in (bad) HTML content. This is the only thing that would really break the JSON by accidentally terminating the string early. Any " characters should be encoded as &quot; if it is meant to be included as HTML content.
 
 func rmLF(data []byte) []byte {
-	return bytes.ReplaceAll(data, []byte{'\n'}, []byte{})
+	data = bytes.ReplaceAll(data, []byte{'\n'}, []byte{})
+	data = bytes.ReplaceAll(data, []byte{'\r'}, []byte{})
+	return data
 }
 
 func escQuInHTML(ori string) string {
@@ -37,24 +40,49 @@ func escQuInHTML(ori string) string {
 	})
 }
 
+func fixErrComma(s string) string {
+	r := regexp.MustCompile(`,\s*[\}\]]`)
+	spanList := r.FindAllStringIndex(s, -1)
+	for _, span := range spanList {
+		b, e := span[0], span[1]
+		fmt.Println(s[b:e])
+	}
+	spanls := [][2]int{}
+	for _, span := range spanList {
+		spanls = append(spanls, [2]int{span[0], span[1] - 1})
+	}
+	return strs.RangeReplace(s, spanls, []string{" "})
+}
+
 func Preproc() {
 	filepath.Walk("../", func(path string, info fs.FileInfo, err error) error {
 		if strings.HasSuffix(path, ".json") {
+
 			fmt.Println(path)
 			data, err := os.ReadFile(path)
 			if err != nil {
 				return err
 			}
+
 			data = rmLF(data)
 			data = []byte(escQuInHTML(string(data)))
+			data = []byte(fixErrComma(string(data)))
 
-			lk.FailOnErrWhen(!jt.IsValid(data), "%v", fmt.Errorf("json error@ %s", path))
+			if !jt.IsValid(data) {
+				gio.MustCreateDir("err/")
+				outname := filepath.Base(path)
+				out := filepath.Join("err/", outname)
+				os.WriteFile(out, data, os.ModePerm)
+				lk.FailOnErr("%v", fmt.Errorf("json error@ %s", path))
+			}
 
 			// save
 			gio.MustCreateDir("out/")
 			outname := filepath.Base(path)
 			out := filepath.Join("out/", outname)
 			os.WriteFile(out, data, os.ModePerm)
+
+			lk.Log("%s is processed & stored", out)
 		}
 		return nil
 	})
