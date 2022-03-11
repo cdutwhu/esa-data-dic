@@ -1,6 +1,7 @@
 import { promises as fsp } from "fs"
 import * as fs from 'fs' // sync listFile
 import * as path from 'path'
+import * as util from 'util'
 
 export const getDir = async (dir) => {
     let names
@@ -71,4 +72,69 @@ export const getFileContent = async (filePath, encoding = "utf-8") => {
 // (async () => {
 //     const content = await getFileContent("../package.json")
 //     console.log(content)
+// })()
+
+export const xpath2object = async (xpath, value) => {
+    const paths = xpath.split('.')
+    let objVal = value
+    let object = {}
+    for (const seg of paths.reverse()) {
+        object = {}
+        object[seg] = objVal
+        objVal = object
+    }
+    return object
+}
+
+// (async () => {
+//     const object = await xpath2object("a.b.c.d.e", true)
+//     console.log(object)
+//     console.log(util.inspect(object, { showHidden: false, depth: null, colors: true }))
+// })()
+
+/**
+ * Simple object check.
+ * @param item
+ * @returns {boolean}
+ */
+export const isObject = (item) => {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+/**
+ * Deep merge two objects.
+ * @param target
+ * @param ...sources
+ */
+export const mergeDeep = async (target, ...sources) => {
+    if (!sources.length) return target;
+    const source = sources.shift();
+
+    if (isObject(target) && isObject(source)) {
+        for (const key in source) {
+            if (isObject(source[key])) {
+                if (!target[key]) Object.assign(target, { [key]: {} });
+                await mergeDeep(target[key], source[key]);
+            } else {
+                Object.assign(target, { [key]: source[key] });
+            }
+        }
+    }
+
+    return mergeDeep(target, ...sources);
+}
+
+// (async () => {
+//     let merged = await mergeDeep({ a: 1 }, { b: { c: { d: { e: 12345 } } } });
+//     console.log(merged)
+
+//     const object1 = await xpath2object("a.b.c.d.e", true)
+//     console.log(object1)
+
+//     const object2 = await xpath2object("a.b.C.D.E", true)
+//     console.log(object2)
+
+//     merged = {}
+//     merged = await mergeDeep(merged, object1, object2)
+//     console.log(util.inspect(merged, { showHidden: false, depth: null, colors: true }))
 // })()
