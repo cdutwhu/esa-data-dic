@@ -1,31 +1,47 @@
-import { getFileContent } from './tool.js'
 import * as ejs from 'ejs'
 import * as fs from 'fs'
+import { po, OnFindEntity, OnListEntity } from './db-find.js'
 
 const template = fs.readFileSync('./www/dictionary.ejs', 'utf-8')
-const posts = []
 
-const render_ejs = (res, myposts) => {
+const render_ejs = (po, code) => {
+
     const data = ejs.render(template, {
-        title: 'Educational Data Dictionary',
-        posts: myposts,
+        title: po.title,
+        entities: po.entities,
+        content: po.content,
+        entity: po.entity,
+        collections: po.collections,
+
+        mytest: po.mytest,
     })
-    res
-        .code(200)
+
+    po.res
+        .code(code)
         .header('Content-Type', 'text/html; charset=utf-8')
         .send(data)
 }
 
-export const forum_test = async (fastify, options) => {
+export const esa_dic = async (fastify, options) => {
 
-    fastify.get('/dictionary', async (req, res) => {
-        console.log(posts)
-        render_ejs(res, posts)
+    fastify.get('/', async (req, res) => {
+        {
+            po.res = res
+        }
+        await OnListEntity(
+            render_ejs
+        )
     })
 
     fastify.post('/search', async (req, res) => {
         // console.log(new Date().getTime())
-        posts.push(req.body.content) // input(text)-name@'content'
-        render_ejs(res, posts)
+        const entityVal = req.body.content // input(text)-name@'content'
+        {
+            po.res = res
+        }
+        await OnFindEntity(
+            entityVal,
+            render_ejs,
+        )
     })
 }

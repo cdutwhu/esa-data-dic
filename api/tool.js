@@ -3,6 +3,10 @@ import * as fs from 'fs' // sync listFile
 import * as path from 'path'
 import * as util from 'util'
 
+export const provided = (param) => {
+    return param !== undefined
+}
+
 export const getDir = async (dir) => {
     let names
     try {
