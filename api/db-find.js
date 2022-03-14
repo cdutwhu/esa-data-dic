@@ -33,8 +33,12 @@ const find_dic = async (db, colName, oneFlag, attr, value, ...out_attrs) => {
 
     let query = {}
     if (attr !== '') {
-        // query = { [attr]: value }
-        query = await xpath2object(attr, value)
+        // regex for case insensitive
+        const rVal = new RegExp('^' + value + '$', 'i')
+
+        // make query object 
+        // query = { [attr]: rVal }
+        query = await xpath2object(attr, rVal)
     }
     console.log(query)
 
