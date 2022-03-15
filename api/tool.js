@@ -142,3 +142,13 @@ export const mergeDeep = async (target, ...sources) => {
 //     merged = await mergeDeep(merged, object1, object2)
 //     console.log(util.inspect(merged, { showHidden: false, depth: null, colors: true }))
 // })()
+
+/////////////////////////////////////////////////////////////
+
+export const css_p_id_inject = (p, id) => {
+    return p.replaceAll('<p>', `<p id=${id}>`)
+}
+
+export const css_p_class_inject = (p, className) => {
+    return p.replaceAll('<p>', `<p class=${className}>`)
+}

@@ -12,8 +12,11 @@ const render_ejs = (po, code) => {
         content: po.content,
         entity: po.entity,
         collections: po.collections,
-
-        mytest: po.mytest,
+        crossrefentities: po.crossrefentities,
+        definition: po.definition,
+        expectedattributes: po.expectedattributes,
+        identifier: po.identifier,
+        legalDefinitions: po.legalDefinitions,
     })
 
     po.res

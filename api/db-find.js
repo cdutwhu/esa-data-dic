@@ -1,6 +1,6 @@
 import * as mongodb from 'mongodb'
 import * as assert from 'assert'
-import { provided, xpath2object } from './tool.js'
+import { provided, xpath2object, css_p_class_inject } from './tool.js'
 
 const MongoClient = mongodb.MongoClient
 const dbName = 'dictionary'
@@ -104,7 +104,19 @@ export const OnListEntity = async (fnReady) => {
         const db = client.db(dbName) // create if not existing
         const colName = 'entity'
 
-        po.entities = await list_entity(db, colName)
+        {
+            po.entities = await list_entity(db, colName)
+            po.content = null
+
+            po.entity = ""
+            po.collections = []
+            po.crossrefentities = []
+            po.definition = ""
+            po.expectedattributes = []
+            po.identifier = ""
+            po.legalDefinitions = []
+        }
+
         fnReady(po, 200)
 
         client.close()
@@ -121,19 +133,91 @@ export const OnFindEntity = async (value, fnReady) => {
 
         const content = await find_dic(db, colName, true, 'Entity', value)
         if (content == null) {
+
+            console.log('--- NULL CONTENT ---')
+
             {
+                po.content = null
+
                 po.entity = "Couldn't find entity: " + value
                 po.collections = []
-                po.mytest = 0
+                po.crossrefentities = []
+                po.definition = ""
+                po.expectedattributes = []
+                po.identifier = ""
+                po.legalDefinitions = []
             }
             fnReady(po, 404)
+
         } else {
+
+            console.log('--- HAS CONTENT ---')
+
             {
-                po.entity = content.Entity
-                po.collections = content.Collections
-                po.mytest = 10
+                po.content = content
+
+                if (provided(content.Entity)) {
+                    po.entity = content.Entity
+                } else {
+                    po.entity = ""
+                }
+
+                if (provided(content.Collections)) {
+                    po.collections = content.Collections
+
+                    for (let i = 0; i < content.Collections.length; i++) {
+                        if (!provided(content.Collections[i].Elements)) {
+                            po.collections[i].Elements = []
+                        }
+                        if (!provided(content.Collections[i].BusinessRules)) {
+                            po.collections[i].BusinessRules = []
+                        }
+                    }
+
+                } else {
+                    po.collections = []
+                }
+
+                if (provided(content.CrossrefEntities)) {
+                    po.crossrefentities = content.CrossrefEntities
+                } else {
+                    po.crossrefentities = []
+                }
+
+                if (provided(content.Definition)) {
+                    po.definition = css_p_class_inject(content.Definition, 'content')
+                } else {
+                    po.definition = ""
+                }
+
+                if (provided(content.ExpectedAttributes)) {
+                    po.expectedattributes = content.ExpectedAttributes
+                } else {
+                    po.expectedattributes = []
+                }
+
+                if (provided(content.Identifier)) {
+                    po.identifier = content.Identifier
+                } else {
+                    po.identifier = ""
+                }
+
+                if (provided(content.LegalDefinitions)) {
+                    po.legalDefinitions = content.LegalDefinitions
+
+                    for (let i = 0; i < content.LegalDefinitions.length; i++) {
+                        if (provided(content.LegalDefinitions[i].Definition)) {
+                            po.legalDefinitions[i].Definition = css_p_class_inject(content.LegalDefinitions[i].Definition, 'content')
+                        }
+                    }
+
+                } else {
+                    po.legalDefinitions = []
+                }
+
             }
             fnReady(po, 200)
+
         }
 
         client.close()
