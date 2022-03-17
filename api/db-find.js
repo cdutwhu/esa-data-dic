@@ -1,6 +1,6 @@
 import * as mongodb from 'mongodb'
 import * as assert from 'assert'
-import { provided, xpath2object, css_p_class_inject } from './tool.js'
+import { assign, xpath2object, css_p_class_inject } from './tool.js'
 
 const MongoClient = mongodb.MongoClient
 const dbName = 'dictionary'
@@ -33,6 +33,10 @@ const find_dic = async (db, colName, oneFlag, attr, value, ...out_attrs) => {
 
     let query = {}
     if (attr !== '') {
+        // escape original regex symbols
+        value = value.replaceAll('(', '\\(')
+        value = value.replaceAll(')', '\\)')
+
         // regex for case insensitive
         const rVal = new RegExp('^' + value + '$', 'i')
 
@@ -110,11 +114,16 @@ export const OnListEntity = async (fnReady) => {
 
             po.entity = ""
             po.collections = []
-            po.crossrefentities = []
+            po.crossrefEntities = []
             po.definition = ""
-            po.expectedattributes = []
+            po.expectedAttributes = []
             po.identifier = ""
             po.legalDefinitions = []
+            po.otherNames = []
+            po.otherStandards = []
+            po.sif = []
+            po.superclass = []
+            po.type = []
         }
 
         fnReady(po, 200)
@@ -131,8 +140,8 @@ export const OnFindEntity = async (value, fnReady) => {
         const db = client.db(dbName) // create if not existing
         const colName = 'entity'
 
-        const content = await find_dic(db, colName, true, 'Entity', value)
-        if (content == null) {
+        const cont = await find_dic(db, colName, true, 'Entity', value)
+        if (cont == null) {
 
             console.log('--- NULL CONTENT ---')
 
@@ -141,12 +150,18 @@ export const OnFindEntity = async (value, fnReady) => {
 
                 po.entity = "Couldn't find entity: " + value
                 po.collections = []
-                po.crossrefentities = []
+                po.crossrefEntities = []
                 po.definition = ""
-                po.expectedattributes = []
+                po.expectedAttributes = []
                 po.identifier = ""
                 po.legalDefinitions = []
+                po.otherNames = []
+                po.otherStandards = []
+                po.sif = []
+                po.superclass = []
+                po.type = []
             }
+
             fnReady(po, 404)
 
         } else {
@@ -154,66 +169,32 @@ export const OnFindEntity = async (value, fnReady) => {
             console.log('--- HAS CONTENT ---')
 
             {
-                po.content = content
+                po.content = cont
 
-                if (provided(content.Entity)) {
-                    po.entity = content.Entity
-                } else {
-                    po.entity = ""
+                assign(po, 'entity', cont.Entity, "")
+
+                assign(po, 'collections', cont.Collections, [])
+                for (let i = 0; i < po.collections.length; i++) {
+                    assign(po.collections[i], 'Elements', cont.Collections[i].Elements, [])
+                    assign(po.collections[i], 'BusinessRules', cont.Collections[i].BusinessRules, [])
                 }
 
-                if (provided(content.Collections)) {
-                    po.collections = content.Collections
+                assign(po, 'crossrefEntities', cont.CrossrefEntities, [])
 
-                    for (let i = 0; i < content.Collections.length; i++) {
-                        if (!provided(content.Collections[i].Elements)) {
-                            po.collections[i].Elements = []
-                        }
-                        if (!provided(content.Collections[i].BusinessRules)) {
-                            po.collections[i].BusinessRules = []
-                        }
-                    }
+                assign(po, 'definition', cont.Definition, "", css_p_class_inject, 'content')
 
-                } else {
-                    po.collections = []
+                assign(po, 'expectedAttributes', cont.ExpectedAttributes, [])
+
+                assign(po, 'identifier', cont.Identifier, "")
+
+                assign(po, 'legalDefinitions', cont.LegalDefinitions, [])
+                for (let i = 0; i < po.legalDefinitions.length; i++) {
+                    assign(po.legalDefinitions[i], 'Definition', cont.LegalDefinitions[i].Definition, "", css_p_class_inject, 'content')
                 }
 
-                if (provided(content.CrossrefEntities)) {
-                    po.crossrefentities = content.CrossrefEntities
-                } else {
-                    po.crossrefentities = []
-                }
+                assign(po, 'otherNames', cont.OtherNames, [])
 
-                if (provided(content.Definition)) {
-                    po.definition = css_p_class_inject(content.Definition, 'content')
-                } else {
-                    po.definition = ""
-                }
-
-                if (provided(content.ExpectedAttributes)) {
-                    po.expectedattributes = content.ExpectedAttributes
-                } else {
-                    po.expectedattributes = []
-                }
-
-                if (provided(content.Identifier)) {
-                    po.identifier = content.Identifier
-                } else {
-                    po.identifier = ""
-                }
-
-                if (provided(content.LegalDefinitions)) {
-                    po.legalDefinitions = content.LegalDefinitions
-
-                    for (let i = 0; i < content.LegalDefinitions.length; i++) {
-                        if (provided(content.LegalDefinitions[i].Definition)) {
-                            po.legalDefinitions[i].Definition = css_p_class_inject(content.LegalDefinitions[i].Definition, 'content')
-                        }
-                    }
-
-                } else {
-                    po.legalDefinitions = []
-                }
+                assign(po, 'otherStandards', cont.OtherStandards, [])
 
             }
             fnReady(po, 200)

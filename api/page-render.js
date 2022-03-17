@@ -10,13 +10,19 @@ const render_ejs = (po, code) => {
         title: po.title,
         entities: po.entities,
         content: po.content,
+
         entity: po.entity,
         collections: po.collections,
-        crossrefentities: po.crossrefentities,
+        crossrefEntities: po.crossrefEntities,
         definition: po.definition,
-        expectedattributes: po.expectedattributes,
+        expectedAttributes: po.expectedAttributes,
         identifier: po.identifier,
         legalDefinitions: po.legalDefinitions,
+        otherNames: po.otherNames,
+        otherStandards: po.otherStandards,
+        sif: po.sif,
+        superclass: po.superclass,
+        type: po.type,
     })
 
     po.res

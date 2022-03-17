@@ -3,8 +3,20 @@ import * as fs from 'fs' // sync listFile
 import * as path from 'path'
 import * as util from 'util'
 
-export const provided = (param) => {
+const provided = (param) => {
     return param !== undefined
+}
+
+export const assign = (obj, fld, val, dflt_val, fn_css_class, css_class) => {
+    if (provided(val)) {
+        if (provided(fn_css_class)) {
+            obj[fld] = fn_css_class(val, css_class)
+        } else {
+            obj[fld] = val
+        }
+    } else {
+        obj[fld] = dflt_val
+    }
 }
 
 export const getDir = async (dir) => {

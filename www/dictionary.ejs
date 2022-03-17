@@ -91,9 +91,9 @@
 
     <!-- CrossrefEntities -->
     <p class="content">
-        <% for(let i=0; i < crossrefentities.length; i++) { %>
-            <%= crossrefentities[i] %>
-                <% if ( i < crossrefentities.length - 1) { %> &nbsp;|&nbsp; <% } %>
+        <% for(let i=0; i < crossrefEntities.length; i++) { %>
+            <%= crossrefEntities[i] %>
+                <% if ( i < crossrefEntities.length - 1) { %> &nbsp;|&nbsp; <% } %>
                         <% } %>
     </p>
 
@@ -116,9 +116,9 @@
 
     <!-- ExpectedAttributes -->
     <p class="content">
-        <% for(let i=0; i < expectedattributes.length; i++) { %>
-            <%= expectedattributes[i] %>
-                <% if ( i < expectedattributes.length - 1) { %> &nbsp;|&nbsp; <% } %>
+        <% for(let i=0; i < expectedAttributes.length; i++) { %>
+            <%= expectedAttributes[i] %>
+                <% if ( i < expectedAttributes.length - 1) { %> &nbsp;|&nbsp; <% } %>
                         <% } %>
     </p>
 
@@ -174,6 +174,22 @@
             <hr id="line3">
             <% } %>
     </div>
+
+    <!-- OtherNames -->
+    <p class="content">
+        <% for(let i=0; i < otherNames.length; i++) { %>
+            <%= otherNames[i] %>
+                <% if ( i < otherNames.length - 1) { %> &nbsp;|&nbsp; <% } %>
+                        <% } %>
+    </p>
+
+
+    <div>
+        <% if (content !=null) { %>
+            <hr id="line3">
+            <% } %>
+    </div>
+
 
     <br>
     <br>
