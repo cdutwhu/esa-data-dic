@@ -42,12 +42,12 @@ li.entitylist {
     padding-bottom: 5px;
 }
 
-div.entity {
+div.block {
     padding-left: 20px;
     font-size: larger;
     font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: -20px;
+    margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 p.content {

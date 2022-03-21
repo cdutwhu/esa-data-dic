@@ -196,6 +196,11 @@ export const OnFindEntity = async (value, fnReady) => {
 
                 assign(po, 'otherStandards', cont.OtherStandards, [])
 
+                assign(po, 'sif', cont.SIF, [])
+
+                assign(po, 'superclass', cont.Superclass, [])
+
+                assign(po, 'type', cont.Type, "")
             }
             fnReady(po, 200)
 

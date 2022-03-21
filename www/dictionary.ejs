@@ -34,162 +34,234 @@
     <hr id="line2">
 
     <!-- Entity -->
-    <div class="entity">
-        <%= entity %>
-    </div>
-
-    <div>
+    <div class="block">
         <% if (content !=null) { %>
-            <hr id="line3">
-            <% } %>
+            Entity:&nbsp;&nbsp;<%= entity %>
+                <hr id="line3">
+                <% } %>
     </div>
 
     <!-- Collections -->
-    <div>
-        <% for(let i=0; i < collections.length; i++) { %>
-            <p class="content">
-                <%= collections[i].Name %>
-            </p>
-            <p class="content">
-                <%= collections[i].Description %>
-            </p>
-            <p class="content">
-                <%= collections[i].Standard %>
-            </p>
-            <p class="content">
-                <%= collections[i].DefinitionModification %>
-            </p>
-            <div>
-                <% for(let j=0; j < collections[i].Elements.length; j++) { %>
-                    <p class="subitem">
-                        <%= collections[i].Elements[j] %>
-                            <% } %>
-                    </p>
-            </div>
-            <div>
-                <% for(let j=0; j < collections[i].BusinessRules.length; j++) { %>
-                    <p class="subitem">
-                        <%= collections[i].BusinessRules[j] %>
-                            <% } %>
-                    </p>
-            </div>
-
-            <div>
-                <% if ( i < collections.length - 1 ) { %>
-                    <hr id="line4">
-                    <% } %>
-            </div>
-
-            <% } %>
-    </div>
-
-    <div>
+    <div class="block">
         <% if (content !=null) { %>
-            <hr id="line3">
-            <% } %>
+            Collections:
+            <% for(let i=0; i < collections.length; i++) { %>
+                <p class="content">
+                    <%= collections[i].Name %>
+                </p>
+                <p class="content">
+                    <%= collections[i].Description %>
+                </p>
+                <p class="content">
+                    <%= collections[i].Standard %>
+                </p>
+                <p class="content">
+                    <%= collections[i].DefinitionModification %>
+                </p>
+                <div>
+                    <% for(let j=0; j < collections[i].Elements.length; j++) { %>
+                        <p class="subitem">
+                            <%= collections[i].Elements[j] %>
+                                <% } %>
+                        </p>
+                </div>
+                <div>
+                    <% for(let j=0; j < collections[i].BusinessRules.length; j++) { %>
+                        <p class="subitem">
+                            <%= collections[i].BusinessRules[j] %>
+                                <% } %>
+                        </p>
+                </div>
+                <div>
+                    <% if ( i < collections.length - 1 ) { %>
+                        <hr id="line4">
+                        <% } %>
+                </div>
+                <% } %>
+                    <hr id="line3">
+                    <% } %>
     </div>
 
     <!-- CrossrefEntities -->
-    <p class="content">
-        <% for(let i=0; i < crossrefEntities.length; i++) { %>
-            <%= crossrefEntities[i] %>
-                <% if ( i < crossrefEntities.length - 1) { %> &nbsp;|&nbsp; <% } %>
-                        <% } %>
-    </p>
-
-    <div>
+    <div class="block">
         <% if (content !=null) { %>
-            <hr id="line3">
-            <% } %>
+            CrossrefEntities:&nbsp;&nbsp;
+            <% for(let i=0; i < crossrefEntities.length; i++) { %>
+                <%= crossrefEntities[i] %>
+                    <% if ( i < crossrefEntities.length - 1) { %> &nbsp;|&nbsp; <% } %>
+                            <% } %>
+                                <hr id="line3">
+                                <% } %>
     </div>
 
     <!-- Definition -->
-    <div>
-        <%- definition %>
-    </div>
-
-    <div>
+    <div class="block">
         <% if (content !=null) { %>
-            <hr id="line3">
-            <% } %>
+            Definition:&nbsp;&nbsp;
+            <%- definition %>
+                <hr id="line3">
+                <% } %>
     </div>
 
     <!-- ExpectedAttributes -->
-    <p class="content">
-        <% for(let i=0; i < expectedAttributes.length; i++) { %>
-            <%= expectedAttributes[i] %>
-                <% if ( i < expectedAttributes.length - 1) { %> &nbsp;|&nbsp; <% } %>
-                        <% } %>
-    </p>
-
-    <div>
+    <div class="block">
         <% if (content !=null) { %>
-            <hr id="line3">
-            <% } %>
+            ExpectedAttributes:&nbsp;&nbsp;
+            <% for(let i=0; i < expectedAttributes.length; i++) { %>
+                <%= expectedAttributes[i] %>
+                    <% if ( i < expectedAttributes.length - 1) { %> &nbsp;|&nbsp; <% } %>
+                            <% } %>
+                                <hr id="line3">
+                                <% } %>
     </div>
 
     <!-- Identifier -->
-    <p class="content">
-        <%= identifier %>
-    </p>
-
-    <div>
+    <div class="block">
         <% if (content !=null) { %>
-            <hr id="line3">
-            <% } %>
+            Identifier:&nbsp;&nbsp;
+            <%= identifier %>
+                <hr id="line3">
+                <% } %>
     </div>
 
     <!-- LegalDefinitions -->
-    <div>
-        <% for(let i=0; i < legalDefinitions.length; i++) { %>
-            <p class="content"> LegislationName:&nbsp;&nbsp;
-                <%= legalDefinitions[i].LegislationName %>
-            </p>
-            <p class="content"> Citation:&nbsp;&nbsp;
-                <%= legalDefinitions[i].Citation %>
-            </p>
-            <p class="content">
-                <%= legalDefinitions[i].Link %>
-            </p>
-            <p class="content">
-                <%= legalDefinitions[i].Datestamp %>
-            </p>
-            <p class="content"> Definition:&nbsp;&nbsp;
-                <%- legalDefinitions[i].Definition %>
-            </p>
-            <p class="content">
-                <%= legalDefinitions[i].Commentary %>
-            </p>
-
-            <div>
-                <% if ( i < legalDefinitions.length - 1 ) { %>
-                    <hr id="line4">
-                    <% } %>
-            </div>
-            <% } %>
-    </div>
-
-    <div>
+    <div class="block">
         <% if (content !=null) { %>
-            <hr id="line3">
-            <% } %>
+            LegalDefinitions:&nbsp;&nbsp;
+            <% for(let i=0; i < legalDefinitions.length; i++) { %>
+                <p class="content"> LegislationName:&nbsp;&nbsp;
+                    <%= legalDefinitions[i].LegislationName %>
+                </p>
+                <p class="content"> Citation:&nbsp;&nbsp;
+                    <%= legalDefinitions[i].Citation %>
+                </p>
+                <p class="content">
+                    <%= legalDefinitions[i].Link %>
+                </p>
+                <p class="content">
+                    <%= legalDefinitions[i].Datestamp %>
+                </p>
+                <p class="content"> Definition:&nbsp;&nbsp;
+                    <%- legalDefinitions[i].Definition %>
+                </p>
+                <p class="content">
+                    <%= legalDefinitions[i].Commentary %>
+                </p>
+                <div>
+                    <% if ( i < legalDefinitions.length - 1 ) { %>
+                        <hr id="line4">
+                        <% } %>
+                </div>
+                <% } %>
+                    <hr id="line3">
+                    <% } %>
     </div>
 
     <!-- OtherNames -->
-    <p class="content">
-        <% for(let i=0; i < otherNames.length; i++) { %>
-            <%= otherNames[i] %>
-                <% if ( i < otherNames.length - 1) { %> &nbsp;|&nbsp; <% } %>
-                        <% } %>
-    </p>
-
-
-    <div>
+    <div class="block">
         <% if (content !=null) { %>
-            <hr id="line3">
-            <% } %>
+            OtherNames:&nbsp;&nbsp;
+            <% for(let i=0; i < otherNames.length; i++) { %>
+                <%= otherNames[i] %>
+                    <% if ( i < otherNames.length - 1) { %> &nbsp;|&nbsp; <% } %>
+                            <% } %>
+                                <hr id="line3">
+                                <% } %>
     </div>
 
+    <!-- OtherStandards -->
+    <div class="block">
+        <% if (content !=null) { %>
+            OtherStandards:&nbsp;&nbsp;
+            <% for(let i=0; i < otherStandards.length; i++) { %>
+                <p class="content"> Standard:&nbsp;&nbsp;
+                    <%= otherStandards[i].Standard %>
+                </p>
+                <div>
+                    <p class="content"> Link:&nbsp;&nbsp;
+                        <% for(let j=0; j < otherStandards[i].Link.length; j++) { %>
+                            <p class="subitem">
+                                <%- otherStandards[i].Link[j] %>
+                            </p>
+                            <% } %>
+                    </p>
+                </div>
+                <div>
+                    <p class="content"> Path:&nbsp;&nbsp;
+                        <% for(let j=0; j < otherStandards[i].Path.length; j++) { %>
+                            <p class="subitem">
+                                <%= otherStandards[i].Path[j] %>
+                            </p>
+                            <% } %>
+                    </p>
+                </div>
+                <p class="content"> Definition:&nbsp;&nbsp;
+                    <%= otherStandards[i].Definition %>
+                </p>
+                <p class="content"> Commentary:&nbsp;&nbsp;
+                    <%- otherStandards[i].Commentary %>
+                </p>
+                <div>
+                    <% if ( i < otherStandards.length - 1 ) { %>
+                        <hr id="line4">
+                        <% } %>
+                </div>
+                <% } %>
+                    <hr id="line3">
+                    <% } %>
+    </div>
+
+    <!-- SIF -->
+    <div class="block">
+        <% if (content !=null) { %>
+            SIF:&nbsp;&nbsp;
+            <% for(let i=0; i < sif.length; i++) { %>
+                <div>
+                    <p class="content"> XPath:&nbsp;&nbsp;
+                        <% for(let j=0; j < sif[i].XPath.length; j++) { %>
+                            <p class="subitem">
+                                <%- sif[i].XPath[j] %>
+                            </p>
+                            <% } %>
+                    </p>
+                </div>
+                <p class="content"> Datestamp:&nbsp;&nbsp;
+                    <%= sif[i].Datestamp %>
+                </p>
+                <p class="content"> Definition:&nbsp;&nbsp;
+                    <%- sif[i].Definition %>
+                </p>
+                <div>
+                    <% if ( i < sif.length - 1 ) { %>
+                        <hr id="line4">
+                        <% } %>
+                </div>
+                <% } %>
+                    <hr id="line3">
+                    <% } %>
+    </div>
+
+    <!-- Superclass -->
+    <div class="block">
+        <% if (content !=null) { %>
+            Superclass:&nbsp;&nbsp;
+            <% for(let i=0; i < superclass.length; i++) { %>
+                <%= superclass[i] %>
+                    <% if ( i < superclass.length - 1) { %> &nbsp;|&nbsp; <% } %>
+                            <% } %>
+                                <hr id="line3">
+                                <% } %>
+    </div>
+
+    <!-- Type -->
+    <div class="block">
+        <% if (content !=null) { %>
+            Type:&nbsp;&nbsp;
+            <%= type %>
+                <% } %>
+    </div>
+
+    <!-- END -->
 
     <br>
     <br>
